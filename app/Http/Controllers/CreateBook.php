@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Image;
-
 use App\Models\Book;
 
 class CreateBook extends Controller
@@ -14,21 +12,25 @@ class CreateBook extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'bookCover' => 'required|image|',
+            'bookTitle' => 'required',
             'bookDesc' => 'required',
-            'bookCover' => 'required|image|max:2048',
         ]);
-        $bookCover = $request->bookCover;
-        $image = Image::make($bookCover);
 
-        Response::make($image->encode('jpeg'));
+        $book = new Book;
+        $book->title = $request->bookTitle;
+        $book->bookDesc = $request->bookDesc;
+        if($request->hasfile('bookCover')){
+            $file = $request->file('bookCover');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('uploads/highligths',$filename);
+            $book->bookCover = $filename;
+        }else{
+            $book->bookCover = '';
+        }
+       $book->save();
 
-        $formData = array(
-            'title' => $request->title,
-            'bookDesc' => $request->bookCover,
-            'bookCover' => $image,
-        );
-        Book::create($formData);
 
         return redirect('/');
     }
