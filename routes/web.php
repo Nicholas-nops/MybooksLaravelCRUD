@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\CreateBook;
+use App\Http\Controllers\DeleteBookController;
 use App\Http\Controllers\DisplayMessagesController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\FirebaseController;
+use App\Http\Controllers\UpdateDescriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +22,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [MainPageController::class, 'index']);
 Route::post('/create',[CreateBook::class, 'create']);
 Route::get('/', [DisplayMessagesController::class,'index']);
+Route::post('/update',[UpdateDescriptionController::class, 'update']);
+Route::post('/delete',[DeleteBookController::class, 'delete']);
